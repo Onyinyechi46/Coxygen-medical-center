@@ -95,3 +95,16 @@ CREATE TABLE medical_transactions (
   INDEX idx_medical_transactions_patient_hash (patient_wallet_hash),
   INDEX idx_medical_transactions_provider_hash (provider_wallet_hash)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE appointment_reminders (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id BIGINT UNSIGNED NOT NULL,
+  appointment_at DATETIME NOT NULL,
+  reminder_email_sent TINYINT(1) NOT NULL DEFAULT 0,
+  reminder_sms_sent TINYINT(1) NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_appointment_reminders_user
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  INDEX idx_appointment_reminders_due (appointment_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
